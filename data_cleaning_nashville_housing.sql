@@ -7,7 +7,18 @@ USE project_portfolio
 SELECT *
 FROM dbo.NashvilleHousingData
 
--- 1. POPULATING PROPERTY ADDRESS
+-- Switch Data Type from TEXT to VARCHAR
+
+ALTER TABLE dbo.nashvillehousingdata ALTER COLUMN ParcelID VARCHAR(MAX)
+ALTER TABLE dbo.nashvillehousingdata ALTER COLUMN LandUse VARCHAR(MAX)
+ALTER TABLE dbo.nashvillehousingdata ALTER COLUMN PropertyAddress VARCHAR(MAX)
+ALTER TABLE dbo.nashvillehousingdata ALTER COLUMN LegalReference VARCHAR(MAX)
+ALTER TABLE dbo.nashvillehousingdata ALTER COLUMN SoldAsVacant VARCHAR(MAX)
+ALTER TABLE dbo.nashvillehousingdata ALTER COLUMN OwnerName VARCHAR(MAX)
+ALTER TABLE dbo.nashvillehousingdata ALTER COLUMN OwnerAddress VARCHAR(MAX)
+ALTER TABLE dbo.nashvillehousingdata ALTER COLUMN TaxDistrict VARCHAR(MAX)
+
+-- 2. POPULATING PROPERTY ADDRESS
 
 -- Fill the blank data with NULL
 
@@ -42,7 +53,7 @@ JOIN dbo.NashvilleHousingData AS b
 ON a.ParcelID = b.ParcelID AND a.UniqueID <> b.UniqueID
 WHERE a.PropertyAddress IS NULL
 
--- 2. BREAKING OUT PROPERTY ADDRESS
+-- 3. BREAKING OUT PROPERTY ADDRESS
 
 SELECT PropertyAddress
 FROM dbo.NashvilleHousingData
@@ -75,7 +86,7 @@ SET OwnerCityAddress = PARSENAME(REPLACE(OwnerAddress, ',', '.'), 2) +
                     PARSENAME(REPLACE(OwnerAddress, ',', '.'), 1)
 FROM dbo.NashvilleHousingData
 
--- 3. CHANGE Y AND N TO YES AND NO IN SOLDASVACANT
+-- 4. CHANGE Y AND N TO YES AND NO IN SOLDASVACANT
 
 -- Looking at various data in SoldAsVacant which has similiar meeting
 
@@ -102,7 +113,7 @@ SET SoldAsVacant = CASE WHEN SoldAsVacant = 'Y' THEN 'Yes'
                 ELSE SoldAsVacant
                 END
 
--- 4. REMOVE DUPLICATES
+-- 5. REMOVE DUPLICATES
 
 -- Looking at duplicate rows
 
